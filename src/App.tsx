@@ -185,12 +185,12 @@ export default function App() {
   }, [config, grades])
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans md:text-base selection:bg-blue-100 selection:text-blue-900">
       {/* Minimal Header */}
       <Header language={language} onToggleLanguage={handleToggleLanguage} />
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-full px-4 sm:px-6 md:px-8 py-5 space-y-4">
+      <main className="flex-1 w-full max-w-full px-4 sm:px-6 md:px-8 lg:px-12 py-5 md:py-8 space-y-4 md:space-y-6">
         {/* Track & Semester Selector */}
         <TrackSelector
           selectedTrack={track}

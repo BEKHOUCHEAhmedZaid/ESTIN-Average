@@ -32,10 +32,10 @@ export const TrackSelector: React.FC<TrackSelectorProps> = ({
   language,
 }) => {
   return (
-    <div className="bg-white border border-slate-200 rounded-lg p-3 sm:p-4 space-y-3">
+    <div className="bg-white border border-slate-200 rounded-lg md:rounded-xl p-3 sm:p-4 md:p-5 space-y-3 md:space-y-4 shadow-xs">
       {/* Year / Track Pills */}
       <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
-        <div className="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-medium w-full sm:w-auto overflow-x-auto" id="year-selector">
+        <div className="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-xs md:text-sm font-medium w-full sm:w-auto overflow-x-auto" id="year-selector">
           {TRACKS.map((track) => {
             const isSelected = selectedTrack === track.id
             return (
@@ -46,8 +46,8 @@ export const TrackSelector: React.FC<TrackSelectorProps> = ({
                 data-track={track.id}
                 className={
                   isSelected
-                    ? 'px-3 py-1.5 rounded-md bg-white text-blue-600 font-semibold shadow-xs transition-colors cursor-pointer'
-                    : 'px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors cursor-pointer'
+                    ? 'px-3 py-1.5 md:px-4 md:py-2 rounded-md bg-white text-blue-600 font-semibold shadow-xs transition-colors cursor-pointer'
+                    : 'px-3 py-1.5 md:px-4 md:py-2 rounded-md text-slate-600 hover:text-slate-900 transition-colors cursor-pointer'
                 }
               >
                 {track.label}
@@ -57,7 +57,7 @@ export const TrackSelector: React.FC<TrackSelectorProps> = ({
         </div>
 
         {/* Secondary Actions: Subtle Example / Clear links */}
-        <div className="flex items-center gap-3 text-xs text-slate-500 ml-auto pt-1 sm:pt-0">
+        <div className="flex items-center gap-3 text-xs md:text-sm text-slate-500 ml-auto pt-1 sm:pt-0">
           <button
             type="button"
             onClick={onSample}
@@ -79,19 +79,19 @@ export const TrackSelector: React.FC<TrackSelectorProps> = ({
       </div>
 
       {/* Semester Segmented Control */}
-      <div className="flex items-center justify-between pt-1 border-t border-slate-100 gap-2">
-        <span className="text-xs font-semibold text-slate-700 truncate" id="current-track-label">
+      <div className="flex items-center justify-between pt-1 md:pt-2 border-t border-slate-100 gap-2">
+        <span className="text-xs sm:text-sm md:text-base font-semibold text-slate-700 truncate" id="current-track-label">
           {trackLabel}
         </span>
-        <div className="inline-flex p-0.5 rounded-md bg-slate-100 border border-slate-200 text-xs font-medium shrink-0">
+        <div className="inline-flex p-0.5 rounded-md bg-slate-100 border border-slate-200 text-xs md:text-sm font-medium shrink-0">
           <button
             type="button"
             id="sem-1-btn"
             onClick={() => onSelectSemester(1)}
             className={
               selectedSemester === 1
-                ? 'px-3 py-1 rounded bg-white text-blue-600 font-semibold shadow-xs cursor-pointer'
-                : 'px-3 py-1 rounded text-slate-600 hover:text-slate-900 cursor-pointer'
+                ? 'px-3 py-1 md:px-4 md:py-1.5 rounded bg-white text-blue-600 font-semibold shadow-xs cursor-pointer'
+                : 'px-3 py-1 md:px-4 md:py-1.5 rounded text-slate-600 hover:text-slate-900 cursor-pointer'
             }
           >
             S1
@@ -102,8 +102,8 @@ export const TrackSelector: React.FC<TrackSelectorProps> = ({
             onClick={() => onSelectSemester(2)}
             className={
               selectedSemester === 2
-                ? 'px-3 py-1 rounded bg-white text-blue-600 font-semibold shadow-xs cursor-pointer'
-                : 'px-3 py-1 rounded text-slate-600 hover:text-slate-900 cursor-pointer'
+                ? 'px-3 py-1 md:px-4 md:py-1.5 rounded bg-white text-blue-600 font-semibold shadow-xs cursor-pointer'
+                : 'px-3 py-1 md:px-4 md:py-1.5 rounded text-slate-600 hover:text-slate-900 cursor-pointer'
             }
           >
             S2

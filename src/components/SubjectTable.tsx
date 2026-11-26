@@ -18,7 +18,7 @@ export const SubjectTable: React.FC<SubjectTableProps> = ({
   language,
 }) => {
   return (
-    <div className="space-y-4 w-full" id="curriculum-container">
+    <div className="space-y-4 md:space-y-6 w-full" id="curriculum-container">
       {units.map((ue, ueIdx) => {
         const ueAvg = ue.average
         const ueAvgStr = formatGrade(ueAvg)
@@ -27,23 +27,23 @@ export const SubjectTable: React.FC<SubjectTableProps> = ({
         return (
           <div
             key={ue.name + ueIdx}
-            className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs"
+            className="bg-white border border-slate-200 rounded-lg md:rounded-xl overflow-hidden shadow-xs"
           >
             {/* UE Header with Title & UE Average badge */}
-            <div className="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-semibold text-slate-800 tracking-tight">
+            <div className="px-4 py-2.5 md:px-6 md:py-3.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <div className="flex items-center gap-2 md:gap-3">
+                <span className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-slate-800 tracking-tight">
                   {ue.name}
                 </span>
-                <span className="text-[11px] text-slate-400 font-medium">
+                <span className="text-[11px] md:text-xs lg:text-sm text-slate-400 font-medium">
                   ({ue.totalCoefficients} coeff • {ue.totalCredits} ECTS)
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-xs">
+              <div className="flex items-center gap-1.5 md:gap-2 text-xs md:text-sm lg:text-base">
                 <span className="text-slate-500 font-medium">{t(language, 'ue_avg_label')}</span>
                 <span
                   id={`ue-avg-${ueIdx}`}
-                  className={`font-bold px-1.5 py-0.5 rounded font-mono tabular-nums ${
+                  className={`font-bold px-1.5 py-0.5 md:px-2.5 md:py-1 rounded font-mono tabular-nums ${
                     isUePassing
                       ? 'text-emerald-700 bg-emerald-50'
                       : 'text-red-600 bg-red-50'
@@ -56,22 +56,22 @@ export const SubjectTable: React.FC<SubjectTableProps> = ({
 
             {/* Clean Compact Responsive Table */}
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
+              <table className="w-full text-left text-xs md:text-sm lg:text-base border-collapse">
                 <thead>
                   <tr className="text-slate-500 border-b border-slate-200 bg-white">
-                    <th scope="col" className="py-2.5 px-3 sm:px-4 font-semibold">
+                    <th scope="col" className="py-2.5 md:py-3.5 px-3 sm:px-4 md:px-6 font-semibold">
                       {t(language, 'th_subject')}
                     </th>
-                    <th scope="col" className="py-2.5 px-2 text-center font-semibold w-14 sm:w-16">
+                    <th scope="col" className="py-2.5 md:py-3.5 px-2 text-center font-semibold w-14 sm:w-16 md:w-24">
                       {t(language, 'th_coeff')}
                     </th>
-                    <th scope="col" className="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">
+                    <th scope="col" className="py-2.5 md:py-3.5 px-2 text-right font-semibold w-24 sm:w-28 md:w-36">
                       {t(language, 'th_exam')}
                     </th>
-                    <th scope="col" className="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">
+                    <th scope="col" className="py-2.5 md:py-3.5 px-2 text-right font-semibold w-24 sm:w-28 md:w-36">
                       {t(language, 'th_td')}
                     </th>
-                    <th scope="col" className="py-2.5 px-3 sm:px-4 text-right font-semibold w-20 sm:w-24">
+                    <th scope="col" className="py-2.5 md:py-3.5 px-3 sm:px-4 md:px-6 text-right font-semibold w-20 sm:w-24 md:w-32">
                       {t(language, 'th_moyenne')}
                     </th>
                   </tr>
@@ -93,45 +93,45 @@ export const SubjectTable: React.FC<SubjectTableProps> = ({
                         key={mod.key}
                         className="hover:bg-slate-50/60 transition-colors"
                       >
-                        <td className="py-2.5 px-3 sm:px-4 font-medium text-slate-800">
+                        <td className="py-2.5 md:py-3.5 px-3 sm:px-4 md:px-6 font-medium text-slate-800">
                           <div className="flex flex-col">
-                            <span className="font-semibold text-slate-900 leading-tight">
+                            <span className="font-semibold text-slate-900 leading-tight text-xs sm:text-sm md:text-base lg:text-lg">
                               {mod.module}
                             </span>
                             {displayName !== mod.module && (
-                              <span className="text-[11px] text-slate-500 font-normal leading-tight mt-0.5">
+                              <span className="text-[11px] md:text-xs lg:text-sm text-slate-500 font-normal leading-tight mt-0.5 md:mt-1">
                                 {displayName}
                               </span>
                             )}
                           </div>
                         </td>
-                        <td className="py-2.5 px-2 text-center text-slate-600 font-medium">
-                          <span className="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 font-mono">
+                        <td className="py-2.5 md:py-3.5 px-2 text-center text-slate-600 font-medium">
+                          <span className="px-1.5 py-0.5 md:px-2.5 md:py-1 rounded bg-slate-100 text-slate-700 font-mono text-xs md:text-sm lg:text-base">
                             {mod.coef}
                           </span>
                         </td>
-                        <td className="py-2.5 px-2 text-right">
+                        <td className="py-2.5 md:py-3.5 px-2 text-right">
                           <GradeInput
                             value={examVal}
                             placeholder="0"
                             aria-label={`${mod.module} - ${t(language, 'th_exam')}`}
                             onChange={(val) => onUpdateGrade(mod.key, 'exam', val)}
-                            className="w-16 sm:w-20 text-right text-xs font-mono font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+                            className="w-16 sm:w-20 md:w-28 text-right text-xs md:text-base lg:text-lg font-mono font-medium py-1 px-1.5 md:py-2 md:px-2.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
                           />
                         </td>
-                        <td className="py-2.5 px-2 text-right">
+                        <td className="py-2.5 md:py-3.5 px-2 text-right">
                           <GradeInput
                             value={tdVal}
                             placeholder="0"
                             aria-label={`${mod.module} - ${t(language, 'th_td')}`}
                             onChange={(val) => onUpdateGrade(mod.key, 'td', val)}
-                            className="w-16 sm:w-20 text-right text-xs font-mono font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+                            className="w-16 sm:w-20 md:w-28 text-right text-xs md:text-base lg:text-lg font-mono font-medium py-1 px-1.5 md:py-2 md:px-2.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
                           />
                         </td>
-                        <td className="py-2.5 px-3 sm:px-4 text-right">
+                        <td className="py-2.5 md:py-3.5 px-3 sm:px-4 md:px-6 text-right">
                           <span
                             id={`avg-mod-${mod.key}`}
-                            className={`inline-block font-semibold font-mono px-1.5 py-0.5 rounded text-xs tabular-nums ${
+                            className={`inline-block font-semibold font-mono px-1.5 py-0.5 md:px-2.5 md:py-1 rounded text-xs md:text-base lg:text-lg tabular-nums ${
                               !hasInput
                                 ? 'bg-slate-100 text-slate-600'
                                 : isPassing
