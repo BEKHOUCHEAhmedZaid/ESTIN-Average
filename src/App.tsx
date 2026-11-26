@@ -185,12 +185,12 @@ export default function App() {
   }, [config, grades])
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans md:text-base selection:bg-blue-100 selection:text-blue-900">
-      {/* Minimal Header */}
+    <div className="h-screen h-[100dvh] flex flex-col bg-slate-50 text-slate-800 font-sans md:text-base selection:bg-blue-100 selection:text-blue-900 overflow-hidden">
+      {/* Fixed Top Header */}
       <Header language={language} onToggleLanguage={handleToggleLanguage} />
 
-      {/* Main Content */}
-      <main className="flex-1 w-full max-w-full px-4 sm:px-6 md:px-8 lg:px-12 py-5 md:py-8 space-y-4 md:space-y-6">
+      {/* Middle Scrollable Section */}
+      <main className="flex-1 overflow-y-auto w-full max-w-full px-4 sm:px-6 md:px-8 lg:px-12 py-4 md:py-6 space-y-4 md:space-y-6">
         {/* Track & Semester Selector */}
         <TrackSelector
           selectedTrack={track}
@@ -203,9 +203,6 @@ export default function App() {
           language={language}
         />
 
-        {/* Results Dashboard (Focal Point) */}
-        <ResultsDashboard results={results} language={language} />
-
         {/* Subject Units (UE) Tables Container */}
         <SubjectTable
           units={results.units}
@@ -213,10 +210,13 @@ export default function App() {
           onUpdateGrade={handleUpdateGrade}
           language={language}
         />
+
+        {/* Footer inside scrollable area */}
+        <Footer language={language} />
       </main>
 
-      {/* Footer */}
-      <Footer language={language} />
+      {/* Fixed Bottom Results Dashboard */}
+      <ResultsDashboard results={results} language={language} />
     </div>
   )
 }
