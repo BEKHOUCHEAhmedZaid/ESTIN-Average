@@ -2,6 +2,7 @@ import React from 'react'
 import type { ComputedUnit, GradesState, Language } from '../types'
 import { t } from '../lib/translations'
 import { formatGrade } from '../lib/validation'
+import { GradeInput } from './GradeInput'
 
 interface SubjectTableProps {
   units: ComputedUnit[]
@@ -110,22 +111,20 @@ export const SubjectTable: React.FC<SubjectTableProps> = ({
                           </span>
                         </td>
                         <td className="py-2.5 px-2 text-right">
-                          <input
-                            type="text"
-                            inputMode="decimal"
+                          <GradeInput
                             value={examVal}
                             placeholder="0"
-                            onChange={(e) => onUpdateGrade(mod.key, 'exam', e.target.value)}
+                            aria-label={`${mod.module} - ${t(language, 'th_exam')}`}
+                            onChange={(val) => onUpdateGrade(mod.key, 'exam', val)}
                             className="w-16 sm:w-20 text-right text-xs font-mono font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
                           />
                         </td>
                         <td className="py-2.5 px-2 text-right">
-                          <input
-                            type="text"
-                            inputMode="decimal"
+                          <GradeInput
                             value={tdVal}
                             placeholder="0"
-                            onChange={(e) => onUpdateGrade(mod.key, 'td', e.target.value)}
+                            aria-label={`${mod.module} - ${t(language, 'th_td')}`}
+                            onChange={(val) => onUpdateGrade(mod.key, 'td', val)}
                             className="w-16 sm:w-20 text-right text-xs font-mono font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
                           />
                         </td>

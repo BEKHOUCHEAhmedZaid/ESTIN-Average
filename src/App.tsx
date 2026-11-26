@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import type { TrackId, SemesterNum, Language, GradesState } from './types'
 import { getSemesterConfig } from './data/semesters'
 import { calculateSemesterResults, getModuleKey } from './lib/calculator'
+import { isValidGradeInput } from './lib/validation'
 import { Header } from './components/Header'
 import { TrackSelector } from './components/TrackSelector'
 import { ResultsDashboard } from './components/ResultsDashboard'
@@ -136,6 +137,7 @@ export default function App() {
   // Handle grade updates
   const handleUpdateGrade = useCallback(
     (moduleKey: string, field: 'exam' | 'td', value: string) => {
+      if (!isValidGradeInput(value)) return
       // Allow user to type decimals with dot or comma
       const updated: GradesState = {
         ...grades,
