@@ -1,0 +1,58 @@
+import type { Language } from '../types'
+
+export const TRANSLATIONS = {
+  fr: {
+    app_title: 'ESTIN Average',
+    app_subtitle: 'Calculateur Académique',
+    toggle_lang: 'FR | EN',
+    btn_sample: 'Exemple',
+    btn_clear: 'Effacer',
+    btn_print: 'Imprimer',
+    title_moyenne_generale: 'Moyenne Générale',
+    kpi_credits: 'Crédits ECTS',
+    kpi_modules: 'Matières Validées',
+    kpi_coeff: 'Total Coeff',
+    th_subject: 'Matière',
+    th_coeff: 'Coeff',
+    th_exam: 'Note Examen (/20)',
+    th_td: 'Note TD/TP (/20)',
+    th_moyenne: 'Moyenne',
+    ue_avg_label: 'UE Moy:',
+    credits_unit_label: 'Crédits:',
+    status_admis: 'Semestre Validé',
+    status_ajourne: 'Semestre Ajourné',
+    status_incomplete: 'Notes incomplètes',
+    footer_text: 'ESTIN • École Supérieure en Sciences et Technologies de l\'Informatique et du Numérique',
+    footer_sub: 'Conçu avec rigueur académique pour les étudiants de l\'ESTIN Béjaïa.',
+    error_bounds: 'Note entre 0 et 20',
+  },
+  en: {
+    app_title: 'ESTIN Average',
+    app_subtitle: 'Academic Calculator',
+    toggle_lang: 'EN | FR',
+    btn_sample: 'Sample',
+    btn_clear: 'Clear',
+    btn_print: 'Print',
+    title_moyenne_generale: 'Overall GPA',
+    kpi_credits: 'ECTS Credits',
+    kpi_modules: 'Passed Subjects',
+    kpi_coeff: 'Total Coeff',
+    th_subject: 'Subject',
+    th_coeff: 'Coeff',
+    th_exam: 'Exam Grade (/20)',
+    th_td: 'Continuous (/20)',
+    th_moyenne: 'Average',
+    ue_avg_label: 'UE Avg:',
+    credits_unit_label: 'Credits:',
+    status_admis: 'Semester Validated',
+    status_ajourne: 'Semester Retake',
+    status_incomplete: 'Incomplete grades',
+    footer_text: 'ESTIN • Higher School of Computer Science and Digital Technologies',
+    footer_sub: 'Engineered with academic precision for ESTIN Béjaïa students.',
+    error_bounds: 'Grade must be 0 to 20',
+  },
+} as const
+
+export function t(lang: Language, key: keyof typeof TRANSLATIONS.fr): string {
+  return TRANSLATIONS[lang][key] || TRANSLATIONS.fr[key] || key
+}

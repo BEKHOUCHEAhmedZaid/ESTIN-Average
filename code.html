@@ -1,0 +1,858 @@
+<!DOCTYPE html><html class="light" lang="fr"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport">
+<title>ESTIN Average — Calculateur Académique</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
+<!-- Minimal Header -->
+<header class="sticky top-0 z-40 bg-white border-b border-slate-200">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+<!-- Logo & Clean Title -->
+<div class="flex items-center gap-2.5"><div class="flex items-center gap-2.5"><img alt="ESTIN Average" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrCpSP7copgOtyVVyscqrpHSLmo9UG8wb7WGb5CXamelZHMiUlWSB84e7afgkpeNeXAwD9pRP507Or4ZW1M3b6eQnx89T_WiiNVujGLqA0NSxDqS8JPGxxMsbCJOCQzqiO8-XqKTdtUHuiP-oAJO-usHohjpP84eJhogMWJ5WbrXAbMx-dv-_twXGamfvj5q-8ZReckerffHLpdXItWRgROmt1aIJnVJgqmphQEpXSY"></div></div>
+<!-- Language Switcher Button -->
+<button aria-label="Toggle language" class="text-xs font-semibold px-2.5 py-1.5 rounded border border-slate-200 hover:border-slate-300 bg-white text-slate-700 hover:bg-slate-50 transition-colors" id="lang-switch-btn" onclick="toggleLanguage()">
+        FR <span class="text-slate-400 font-normal">|</span> EN
+      </button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 max-w-4xl w-full mx-auto px-3 sm:px-6 py-5 space-y-4">
+<!-- Academic Year & Semester Selector -->
+<div class="bg-white border border-slate-200 rounded-lg p-3 sm:p-4 space-y-3">
+<!-- Year Pills -->
+<div class="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+<div class="inline-flex p-0.5 rounded-lg bg-slate-100 border border-slate-200/80 text-xs font-medium w-full sm:w-auto overflow-x-auto" id="year-selector">
+<button class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors" data-track="1CP" onclick="setTrack('1CP')">1CP</button>
+<button class="px-3 py-1.5 rounded-md bg-white text-blue-600 font-semibold shadow-xs transition-colors" data-track="2CP" onclick="setTrack('2CP')">2CP</button>
+<button class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors" data-track="1CS" onclick="setTrack('1CS')">1CS</button>
+<button class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors" data-track="2CS-AI" onclick="setTrack('2CS-AI')">2CS AI</button>
+<button class="px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors" data-track="2CS-CS" onclick="setTrack('2CS-CS')">2CS CS</button>
+</div>
+<!-- Secondary Actions: Subtle Example / Clear links -->
+<div class="flex items-center gap-3 text-xs text-slate-500 ml-auto pt-1 sm:pt-0">
+<button class="hover:text-blue-600 transition-colors" data-i18n="btn_sample" onclick="populateSample()">Exemple</button>
+<span class="text-slate-300">•</span>
+<button class="hover:text-red-600 transition-colors" data-i18n="btn_clear" onclick="clearGrades()">Effacer</button>
+</div>
+</div>
+<!-- Semester Segmented Control -->
+<div class="flex items-center justify-between pt-1 border-t border-slate-100">
+<span class="text-xs font-semibold text-slate-700" id="current-track-label">2CP — Cycle Préparatoire</span>
+<div class="inline-flex p-0.5 rounded-md bg-slate-100 border border-slate-200 text-xs font-medium">
+<button class="px-3 py-1 rounded bg-white text-blue-600 font-semibold shadow-xs" id="sem-1-btn" onclick="setSemester(1)">S1</button>
+<button class="px-3 py-1 rounded text-slate-600 hover:text-slate-900" id="sem-2-btn" onclick="setSemester(2)">S2</button>
+</div>
+</div>
+</div>
+<!-- Results Dashboard (Focal Point) -->
+<div class="bg-white border border-slate-200 rounded-lg p-5 sm:p-6 shadow-xs text-center sm:text-left">
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+<!-- Average Focal Point -->
+<div>
+<div class="text-xs uppercase tracking-wider font-semibold text-slate-500" data-i18n="title_moyenne_generale">
+            Moyenne Générale
+          </div>
+<div class="mt-1 flex items-baseline justify-center sm:justify-start gap-1.5">
+<span class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight" id="gpa-score">13.93</span>
+<span class="text-base font-semibold text-slate-400">/ 20</span>
+</div>
+</div>
+<!-- 3 Essential KPI Stats -->
+<div class="grid grid-cols-3 gap-2 sm:gap-4 sm:w-auto w-full pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+<div class="bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-2 text-center">
+<div class="text-[11px] font-medium text-slate-500" data-i18n="kpi_credits">Crédits ECTS</div>
+<div class="text-sm sm:text-base font-bold text-slate-900 mt-0.5" id="kpi-credits-val">30 / 30</div>
+</div>
+<div class="bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-2 text-center">
+<div class="text-[11px] font-medium text-slate-500" data-i18n="kpi_modules">Matières Validées</div>
+<div class="text-sm sm:text-base font-bold text-slate-900 mt-0.5" id="kpi-modules-val">8 / 8</div>
+</div>
+<div class="bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-2 text-center">
+<div class="text-[11px] font-medium text-slate-500" data-i18n="kpi_coeff">Total Coeff</div>
+<div class="text-sm sm:text-base font-bold text-slate-900 mt-0.5" id="kpi-coeff-val">19</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Subject Units (UE) Tables Container -->
+<div class="space-y-4 w-full" id="curriculum-container">
+          <div class="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs">
+            <!-- UE Header with Title & UE Average badge -->
+            <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <span class="text-xs sm:text-sm font-semibold text-slate-800 tracking-tight">UEF — Unités Fondamentales</span>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="text-slate-500 font-medium">UE Moy:</span>
+                <span id="ue-avg-0" class="font-bold text-emerald-700 px-1.5 py-0.5 rounded bg-emerald-50">13.92</span>
+              </div>
+            </div>
+
+            <!-- Clean Compact Responsive Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="text-slate-500 border-b border-slate-200 bg-white">
+                    <th scope="col" class="py-2.5 px-3 sm:px-4 font-semibold">Matière</th>
+                    <th scope="col" class="py-2.5 px-2 text-center font-semibold w-14 sm:w-16">Coeff</th>
+                    <th scope="col" class="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">Note Examen (/20)</th>
+                    <th scope="col" class="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">Note TD/TP (/20)</th>
+                    <th scope="col" class="py-2.5 px-3 sm:px-4 text-right font-semibold w-20 sm:w-24">Moyenne</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+        
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">Algorithmique &amp; Structures de Données 3</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">4</td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="14" oninput="updateGrade('alsd3', 'exam', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="15.5" oninput="updateGrade('alsd3', 'td', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-alsd3" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700">
+                  14.50
+                </span>
+              </td>
+            </tr>
+          
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">Architecture des Ordinateurs 1</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">3</td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="13.5" oninput="updateGrade('archi1', 'exam', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="14" oninput="updateGrade('archi1', 'td', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-archi1" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700">
+                  13.67
+                </span>
+              </td>
+            </tr>
+          
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">Systèmes d'Information &amp; Merise</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">3</td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="15" oninput="updateGrade('si', 'exam', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="16" oninput="updateGrade('si', 'td', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-si" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700">
+                  15.33
+                </span>
+              </td>
+            </tr>
+          
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">Analyse Mathématique 3</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">3</td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="11.5" oninput="updateGrade('ana3', 'exam', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="13" oninput="updateGrade('ana3', 'td', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-ana3" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700">
+                  12.00
+                </span>
+              </td>
+            </tr>
+          
+                </tbody>
+              </table>
+            </div>
+          </div>
+        
+          <div class="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs">
+            <!-- UE Header with Title & UE Average badge -->
+            <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <span class="text-xs sm:text-sm font-semibold text-slate-800 tracking-tight">UEM — Unités Méthodologiques</span>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="text-slate-500 font-medium">UE Moy:</span>
+                <span id="ue-avg-1" class="font-bold text-emerald-700 px-1.5 py-0.5 rounded bg-emerald-50">13.42</span>
+              </div>
+            </div>
+
+            <!-- Clean Compact Responsive Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="text-slate-500 border-b border-slate-200 bg-white">
+                    <th scope="col" class="py-2.5 px-3 sm:px-4 font-semibold">Matière</th>
+                    <th scope="col" class="py-2.5 px-2 text-center font-semibold w-14 sm:w-16">Coeff</th>
+                    <th scope="col" class="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">Note Examen (/20)</th>
+                    <th scope="col" class="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">Note TD/TP (/20)</th>
+                    <th scope="col" class="py-2.5 px-3 sm:px-4 text-right font-semibold w-20 sm:w-24">Moyenne</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+        
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">Logique Mathématique &amp; Preuves</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">2</td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="14" oninput="updateGrade('lm', 'exam', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="14" oninput="updateGrade('lm', 'td', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-lm" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700">
+                  14.00
+                </span>
+              </td>
+            </tr>
+          
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">Probabilités &amp; Statistiques</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">2</td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="12" oninput="updateGrade('proba', 'exam', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="14.5" oninput="updateGrade('proba', 'td', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-proba" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700">
+                  12.83
+                </span>
+              </td>
+            </tr>
+          
+                </tbody>
+              </table>
+            </div>
+          </div>
+        
+          <div class="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs">
+            <!-- UE Header with Title & UE Average badge -->
+            <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <span class="text-xs sm:text-sm font-semibold text-slate-800 tracking-tight">UET/UED — Unités Transversales &amp; Découverte</span>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="text-slate-500 font-medium">UE Moy:</span>
+                <span id="ue-avg-2" class="font-bold text-emerald-700 px-1.5 py-0.5 rounded bg-emerald-50">15.00</span>
+              </div>
+            </div>
+
+            <!-- Clean Compact Responsive Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="text-slate-500 border-b border-slate-200 bg-white">
+                    <th scope="col" class="py-2.5 px-3 sm:px-4 font-semibold">Matière</th>
+                    <th scope="col" class="py-2.5 px-2 text-center font-semibold w-14 sm:w-16">Coeff</th>
+                    <th scope="col" class="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">Note Examen (/20)</th>
+                    <th scope="col" class="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">Note TD/TP (/20)</th>
+                    <th scope="col" class="py-2.5 px-3 sm:px-4 text-right font-semibold w-20 sm:w-24">Moyenne</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+        
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">Anglais Technique 3</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">1</td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="16.5" oninput="updateGrade('ang3', 'exam', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="17" oninput="updateGrade('ang3', 'td', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-ang3" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700">
+                  16.67
+                </span>
+              </td>
+            </tr>
+          
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">Économie Générale &amp; d'Entreprise</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">1</td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="13" oninput="updateGrade('eco', 'exam', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input type="number" step="0.25" min="0" max="20" value="14" oninput="updateGrade('eco', 'td', this.value)" class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600">
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-eco" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs bg-emerald-50 text-emerald-700">
+                  13.33
+                </span>
+              </td>
+            </tr>
+          
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+</main>
+<!-- Footer -->
+<footer class="mt-auto py-5 text-center text-xs text-slate-400 border-t border-slate-200/70 bg-white">
+<p>ESTIN • École Supérieure en Sciences et Technologies de l'Informatique et du Numérique</p>
+</footer>
+<script>
+    // Bilingual dictionary
+    const TRANSLATIONS = {
+      fr: {
+        title_moyenne_generale: "Moyenne Générale",
+        kpi_credits: "Crédits ECTS",
+        kpi_modules: "Matières Validées",
+        kpi_coeff: "Total Coeff",
+        btn_sample: "Exemple",
+        btn_clear: "Effacer",
+        th_subject: "Matière",
+        th_coeff: "Coeff",
+        th_exam: "Note Examen (/20)",
+        th_td: "Note TD/TP (/20)",
+        th_moyenne: "Moyenne",
+        ue_avg_label: "UE Moy:",
+      },
+      en: {
+        title_moyenne_generale: "Overall GPA",
+        kpi_credits: "ECTS Credits",
+        kpi_modules: "Passed Subjects",
+        kpi_coeff: "Total Coeff",
+        btn_sample: "Sample",
+        btn_clear: "Clear",
+        th_subject: "Subject",
+        th_coeff: "Coeff",
+        th_exam: "Exam Grade (/20)",
+        th_td: "Continuous (/20)",
+        th_moyenne: "Average",
+        ue_avg_label: "UE Avg:",
+      }
+    };
+
+    // Curricula Database: Strict ESTIN 2CP S1 structure and realistic programs
+    const DATA_TRACKS = {
+      "1CP": {
+        name: "1CP — Cycle Préparatoire",
+        s1: [
+          {
+            title: "UEF — Unités Fondamentales",
+            modules: [
+              { id: "alsd1", name: "Algorithmique & Structures de Données 1", coeff: 4, exam: 13.5, td: 14.5 },
+              { id: "archi0", name: "Structure Machine & Numération", coeff: 3, exam: 12.0, td: 13.0 },
+              { id: "ana1", name: "Analyse Mathématique 1", coeff: 4, exam: 11.5, td: 12.0 },
+              { id: "alg1", name: "Algèbre Linéaire 1", coeff: 3, exam: 12.0, td: 13.5 }
+            ]
+          },
+          {
+            title: "UEM — Unités Méthodologiques",
+            modules: [
+              { id: "elec", name: "Électronique Générale", coeff: 2, exam: 13.0, td: 14.0 },
+              { id: "phys", name: "Physique des Semi-conducteurs", coeff: 2, exam: 11.0, td: 12.5 }
+            ]
+          },
+          {
+            title: "UET/UED — Unités Transversales & Découverte",
+            modules: [
+              { id: "ang1", name: "Anglais Technique 1", coeff: 1, exam: 15.0, td: 16.0 }
+            ]
+          }
+        ],
+        s2: [
+          {
+            title: "UEF — Unités Fondamentales",
+            modules: [
+              { id: "alsd2", name: "Algorithmique Avancée & C", coeff: 4, exam: 13.0, td: 14.0 },
+              { id: "ana2", name: "Analyse Mathématique 2", coeff: 4, exam: 11.0, td: 12.0 },
+              { id: "alg2", name: "Algèbre Linéaire 2", coeff: 3, exam: 12.0, td: 12.5 }
+            ]
+          },
+          {
+            title: "UEM — Unités Méthodologiques",
+            modules: [
+              { id: "opto", name: "Optique & Électromagnétisme", coeff: 2, exam: 11.0, td: 12.0 },
+              { id: "poo", name: "Introduction à la POO", coeff: 3, exam: 14.5, td: 15.0 }
+            ]
+          },
+          {
+            title: "UET/UED — Unités Transversales & Découverte",
+            modules: [
+              { id: "ang2", name: "Anglais Technique 2", coeff: 1, exam: 15.0, td: 16.0 },
+              { id: "tic", name: "Technologies de l'Information", coeff: 1, exam: 16.0, td: 16.0 }
+            ]
+          }
+        ]
+      },
+      "2CP": {
+        name: "2CP — Cycle Préparatoire",
+        s1: [
+          {
+            title: "UEF — Unités Fondamentales",
+            modules: [
+              { id: "alsd3", name: "Algorithmique & Structures de Données 3", coeff: 4, exam: 14.0, td: 15.5 },
+              { id: "archi1", name: "Architecture des Ordinateurs 1", coeff: 3, exam: 13.5, td: 14.0 },
+              { id: "si", name: "Systèmes d'Information & Merise", coeff: 3, exam: 15.0, td: 16.0 },
+              { id: "ana3", name: "Analyse Mathématique 3", coeff: 3, exam: 11.5, td: 13.0 }
+            ]
+          },
+          {
+            title: "UEM — Unités Méthodologiques",
+            modules: [
+              { id: "lm", name: "Logique Mathématique & Preuves", coeff: 2, exam: 14.0, td: 14.0 },
+              { id: "proba", name: "Probabilités & Statistiques", coeff: 2, exam: 12.0, td: 14.5 }
+            ]
+          },
+          {
+            title: "UET/UED — Unités Transversales & Découverte",
+            modules: [
+              { id: "ang3", name: "Anglais Technique 3", coeff: 1, exam: 16.5, td: 17.0 },
+              { id: "eco", name: "Économie Générale & d'Entreprise", coeff: 1, exam: 13.0, td: 14.0 }
+            ]
+          }
+        ],
+        s2: [
+          {
+            title: "UEF — Unités Fondamentales",
+            modules: [
+              { id: "se1", name: "Systèmes d'Exploitation 1", coeff: 4, exam: 13.0, td: 14.0 },
+              { id: "bdd", name: "Bases de Données Relationnelles", coeff: 4, exam: 14.0, td: 15.5 },
+              { id: "archi2", name: "Microprocesseurs & Assembleur", coeff: 3, exam: 12.0, td: 13.0 }
+            ]
+          },
+          {
+            title: "UEM — Unités Méthodologiques",
+            modules: [
+              { id: "ro", name: "Recherche Opérationnelle", coeff: 3, exam: 12.5, td: 13.5 },
+              { id: "ana4", name: "Analyse Numérique", coeff: 2, exam: 11.0, td: 12.5 }
+            ]
+          },
+          {
+            title: "UET/UED — Unités Transversales & Découverte",
+            modules: [
+              { id: "ang4", name: "Anglais Technique 4", coeff: 1, exam: 15.0, td: 16.0 },
+              { id: "com", name: "Techniques d'Expression & Communication", coeff: 1, exam: 14.0, td: 14.5 }
+            ]
+          }
+        ]
+      },
+      "1CS": {
+        name: "1CS — Second Cycle Ingénieur",
+        s1: [
+          {
+            title: "UEF — Unités Fondamentales",
+            modules: [
+              { id: "res1", name: "Réseaux Informatiques Fondamentaux", coeff: 4, exam: 13.5, td: 15.0 },
+              { id: "se2", name: "Systèmes d'Exploitation Avancés", coeff: 4, exam: 12.5, td: 14.0 },
+              { id: "gl", name: "Génie Logiciel & Conception UML", coeff: 3, exam: 14.0, td: 15.5 },
+              { id: "compil", name: "Théorie des Langages & Compilation", coeff: 3, exam: 11.5, td: 13.0 }
+            ]
+          },
+          {
+            title: "UEM — Unités Méthodologiques",
+            modules: [
+              { id: "web", name: "Développement Web & Frameworks", coeff: 3, exam: 15.0, td: 16.5 },
+              { id: "ia", name: "Introduction à l'Intelligence Artificielle", coeff: 2, exam: 14.0, td: 15.0 }
+            ]
+          },
+          {
+            title: "UET/UED — Unités Transversales",
+            modules: [
+              { id: "ang5", name: "English for Engineers 1", coeff: 1, exam: 16.0, td: 16.5 }
+            ]
+          }
+        ],
+        s2: [
+          {
+            title: "UEF — Unités Fondamentales",
+            modules: [
+              { id: "distrib", name: "Systèmes Distribués & Cloud", coeff: 4, exam: 13.0, td: 14.0 },
+              { id: "sec1", name: "Fondements de la Sécurité Informatique", coeff: 3, exam: 14.0, td: 15.0 },
+              { id: "opti", name: "Optimisation & Métaheuristiques", coeff: 3, exam: 12.0, td: 13.0 }
+            ]
+          },
+          {
+            title: "UEM — Unités Méthodologiques",
+            modules: [
+              { id: "mobile", name: "Développement Mobile", coeff: 3, exam: 14.5, td: 16.0 },
+              { id: "nosql", name: "Bases de Données NoSQL & Big Data", coeff: 3, exam: 13.0, td: 14.5 }
+            ]
+          },
+          {
+            title: "UET/UED — Unités Transversales",
+            modules: [
+              { id: "droit", name: "Droit Informatique & Éthique", coeff: 1, exam: 14.0, td: 14.0 },
+              { id: "ang6", name: "English for Engineers 2", coeff: 1, exam: 16.0, td: 16.5 }
+            ]
+          }
+        ]
+      },
+      "2CS-AI": {
+        name: "2CS AI — Intelligence Artificielle & Data",
+        s1: [
+          {
+            title: "UEF — Spécialité IA Fondamentale",
+            modules: [
+              { id: "ml", name: "Machine Learning (Apprentissage Automatique)", coeff: 4, exam: 15.0, td: 16.5 },
+              { id: "dl", name: "Deep Learning & Réseaux de Neurones", coeff: 4, exam: 14.0, td: 16.0 },
+              { id: "bigdata", name: "Architectures Big Data", coeff: 3, exam: 13.0, td: 14.5 }
+            ]
+          },
+          {
+            title: "UEM — Méthodes & Applications IA",
+            modules: [
+              { id: "nlp", name: "Traitement Automatique du Langage (NLP)", coeff: 3, exam: 14.0, td: 15.5 },
+              { id: "cv", name: "Computer Vision & Vision Artificielle", coeff: 3, exam: 13.5, td: 15.0 },
+              { id: "proj_ai", name: "Projet Recherche & Ingénierie IA", coeff: 2, exam: 16.0, td: 16.5 }
+            ]
+          }
+        ],
+        s2: [
+          {
+            title: "UEF — Spécialité IA Avancée",
+            modules: [
+              { id: "rl", name: "Reinforcement Learning (RL)", coeff: 4, exam: 14.0, td: 15.0 },
+              { id: "genai", name: "Modèles Génératifs & LLMs", coeff: 4, exam: 15.5, td: 16.5 },
+              { id: "ethics", name: "Éthique & Explicabilité IA", coeff: 2, exam: 15.0, td: 15.0 }
+            ]
+          },
+          {
+            title: "UEM — Stage & Fin d'Étude",
+            modules: [
+              { id: "stage_ai", name: "Projet Pré-PFE & Immersion", coeff: 5, exam: 16.5, td: 17.0 }
+            ]
+          }
+        ]
+      },
+      "2CS-CS": {
+        name: "2CS CS — Cybersécurité & Réseaux",
+        s1: [
+          {
+            title: "UEF — Cybersécurité Fondamentale",
+            modules: [
+              { id: "crypto", name: "Cryptographie Moderne & Protocoles", coeff: 4, exam: 14.0, td: 15.0 },
+              { id: "sec_net", name: "Sécurité Réseaux & Pare-feu", coeff: 4, exam: 13.5, td: 15.5 },
+              { id: "pentest", name: "Tests d'Intrusion & Ethical Hacking", coeff: 3, exam: 14.5, td: 16.0 }
+            ]
+          },
+          {
+            title: "UEM — Investigation & Analyse Cyber",
+            modules: [
+              { id: "reverse", name: "Rétro-ingénierie & Analyse Malware", coeff: 3, exam: 13.0, td: 14.0 },
+              { id: "forensic", name: "Investigation Numérique & Forensics", coeff: 3, exam: 14.0, td: 15.0 },
+              { id: "audit", name: "Gouvernance & Audit Sécurité (ISO 27001)", coeff: 2, exam: 15.0, td: 15.5 }
+            ]
+          }
+        ],
+        s2: [
+          {
+            title: "UEF — Cybersécurité Avancée",
+            modules: [
+              { id: "cloudsec", name: "Sécurité Cloud & Conteneurs", coeff: 4, exam: 14.0, td: 15.5 },
+              { id: "soc", name: "SOC, SIEM & Threat Hunting", coeff: 4, exam: 14.5, td: 16.0 },
+              { id: "iotsec", name: "Sécurité IoT & Systèmes Embarqués", coeff: 2, exam: 13.0, td: 14.0 }
+            ]
+          },
+          {
+            title: "UEM — Stage & Fin d'Étude",
+            modules: [
+              { id: "stage_cyber", name: "Projet Technique & Audit Pré-PFE", coeff: 5, exam: 16.5, td: 17.0 }
+            ]
+          }
+        ]
+      }
+    };
+
+    // State
+    let currentLang = 'fr';
+    let currentTrack = '2CP';
+    let currentSemester = 1;
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'fr' ? 'en' : 'fr';
+      const btn = document.getElementById('lang-switch-btn');
+      if (currentLang === 'fr') {
+        btn.innerHTML = 'FR <span class="text-slate-400 font-normal">|</span> EN';
+      } else {
+        btn.innerHTML = 'EN <span class="text-slate-400 font-normal">|</span> FR';
+      }
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) {
+          el.textContent = TRANSLATIONS[currentLang][key];
+        }
+      });
+
+      renderTables();
+    }
+
+    function setTrack(track) {
+      currentTrack = track;
+      document.querySelectorAll('#year-selector button').forEach(b => {
+        const t = b.getAttribute('data-track');
+        if (t === track) {
+          b.className = "px-3 py-1.5 rounded-md bg-white text-blue-600 font-semibold shadow-xs transition-colors";
+        } else {
+          b.className = "px-3 py-1.5 rounded-md text-slate-600 hover:text-slate-900 transition-colors";
+        }
+      });
+      document.getElementById('current-track-label').textContent = DATA_TRACKS[track].name;
+      renderTables();
+    }
+
+    function setSemester(sem) {
+      currentSemester = sem;
+      const b1 = document.getElementById('sem-1-btn');
+      const b2 = document.getElementById('sem-2-btn');
+      if (sem === 1) {
+        b1.className = "px-3 py-1 rounded bg-white text-blue-600 font-semibold shadow-xs";
+        b2.className = "px-3 py-1 rounded text-slate-600 hover:text-slate-900";
+      } else {
+        b2.className = "px-3 py-1 rounded bg-white text-blue-600 font-semibold shadow-xs";
+        b1.className = "px-3 py-1 rounded text-slate-600 hover:text-slate-900";
+      }
+      renderTables();
+    }
+
+    function renderTables() {
+      const container = document.getElementById('curriculum-container');
+      const semKey = currentSemester === 1 ? 's1' : 's2';
+      const ues = DATA_TRACKS[currentTrack][semKey] || [];
+      const t = TRANSLATIONS[currentLang];
+
+      let html = '';
+
+      ues.forEach((ue, ueIdx) => {
+        html += `
+          <div class="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-xs">
+            <!-- UE Header with Title & UE Average badge -->
+            <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+              <span class="text-xs sm:text-sm font-semibold text-slate-800 tracking-tight">${ue.title}</span>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="text-slate-500 font-medium">${t.ue_avg_label}</span>
+                <span id="ue-avg-${ueIdx}" class="font-bold text-slate-900 px-1.5 py-0.5 rounded bg-slate-200/80">--.--</span>
+              </div>
+            </div>
+
+            <!-- Clean Compact Responsive Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr class="text-slate-500 border-b border-slate-200 bg-white">
+                    <th scope="col" class="py-2.5 px-3 sm:px-4 font-semibold">${t.th_subject}</th>
+                    <th scope="col" class="py-2.5 px-2 text-center font-semibold w-14 sm:w-16">${t.th_coeff}</th>
+                    <th scope="col" class="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">${t.th_exam}</th>
+                    <th scope="col" class="py-2.5 px-2 text-right font-semibold w-24 sm:w-28">${t.th_td}</th>
+                    <th scope="col" class="py-2.5 px-3 sm:px-4 text-right font-semibold w-20 sm:w-24">${t.th_moyenne}</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+        `;
+
+        ue.modules.forEach(mod => {
+          const exam = mod.exam !== undefined ? mod.exam : 10;
+          const td = mod.td !== undefined ? mod.td : 10;
+          const avg = ((exam * 2 + td) / 3).toFixed(2);
+          const isPassing = parseFloat(avg) >= 10.0;
+
+          html += `
+            <tr class="hover:bg-slate-50/60 transition-colors">
+              <td class="py-2.5 px-3 sm:px-4 font-medium text-slate-800">${mod.name}</td>
+              <td class="py-2.5 px-2 text-center text-slate-600 font-medium">${mod.coeff}</td>
+              <td class="py-2.5 px-2 text-right">
+                <input
+                  type="number"
+                  step="0.25"
+                  min="0"
+                  max="20"
+                  value="${exam}"
+                  oninput="updateGrade('${mod.id}', 'exam', this.value)"
+                  class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600"
+                />
+              </td>
+              <td class="py-2.5 px-2 text-right">
+                <input
+                  type="number"
+                  step="0.25"
+                  min="0"
+                  max="20"
+                  value="${td}"
+                  oninput="updateGrade('${mod.id}', 'td', this.value)"
+                  class="w-16 sm:w-20 text-right text-xs font-medium py-1 px-1.5 rounded border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600"
+                />
+              </td>
+              <td class="py-2.5 px-3 sm:px-4 text-right">
+                <span id="avg-mod-${mod.id}" class="inline-block font-semibold px-1.5 py-0.5 rounded text-xs ${isPassing ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}">
+                  ${avg}
+                </span>
+              </td>
+            </tr>
+          `;
+        });
+
+        html += `
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      calculateAll();
+    }
+
+    function updateGrade(modId, type, val) {
+      let num = parseFloat(val);
+      if (isNaN(num)) num = 0;
+      if (num < 0) num = 0;
+      if (num > 20) num = 20;
+
+      const semKey = currentSemester === 1 ? 's1' : 's2';
+      const ues = DATA_TRACKS[currentTrack][semKey] || [];
+
+      for (const ue of ues) {
+        const mod = ue.modules.find(m => m.id === modId);
+        if (mod) {
+          if (type === 'exam') mod.exam = num;
+          if (type === 'td') mod.td = num;
+
+          const avg = ((mod.exam * 2 + mod.td) / 3).toFixed(2);
+          const isPassing = parseFloat(avg) >= 10.0;
+          const avgEl = document.getElementById(`avg-mod-${mod.id}`);
+          if (avgEl) {
+            avgEl.textContent = avg;
+            avgEl.className = `inline-block font-semibold px-1.5 py-0.5 rounded text-xs ${isPassing ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'}`;
+          }
+          break;
+        }
+      }
+
+      calculateAll();
+    }
+
+    function calculateAll() {
+      const semKey = currentSemester === 1 ? 's1' : 's2';
+      const ues = DATA_TRACKS[currentTrack][semKey] || [];
+
+      let totalPoints = 0;
+      let totalCoeff = 0;
+      let passedCount = 0;
+      let totalCount = 0;
+
+      ues.forEach((ue, ueIdx) => {
+        let uePoints = 0;
+        let ueCoeff = 0;
+
+        ue.modules.forEach(m => {
+          totalCount++;
+          const exam = m.exam !== undefined ? m.exam : 0;
+          const td = m.td !== undefined ? m.td : 0;
+          const avg = (exam * 2 + td) / 3;
+
+          uePoints += avg * m.coeff;
+          ueCoeff += m.coeff;
+
+          totalPoints += avg * m.coeff;
+          totalCoeff += m.coeff;
+
+          if (avg >= 10.0) {
+            passedCount++;
+          }
+        });
+
+        const ueAvgEl = document.getElementById(`ue-avg-${ueIdx}`);
+        if (ueAvgEl) {
+          const ueAvg = ueCoeff > 0 ? (uePoints / ueCoeff).toFixed(2) : '0.00';
+          ueAvgEl.textContent = ueAvg;
+          if (parseFloat(ueAvg) >= 10.0) {
+            ueAvgEl.className = "font-bold text-emerald-700 px-1.5 py-0.5 rounded bg-emerald-50";
+          } else {
+            ueAvgEl.className = "font-bold text-red-600 px-1.5 py-0.5 rounded bg-red-50";
+          }
+        }
+      });
+
+      const gpa = totalCoeff > 0 ? (totalPoints / totalCoeff) : 0;
+      const gpaStr = gpa.toFixed(2);
+
+      // KPI elements
+      document.getElementById('gpa-score').textContent = gpaStr;
+      document.getElementById('kpi-coeff-val').textContent = totalCoeff;
+      document.getElementById('kpi-modules-val').textContent = `${passedCount} / ${totalCount}`;
+
+      // ECTS rule: if general semester average >= 10.0, compensation grants all 30 credits
+      const creditsEarned = gpa >= 10.0 ? 30 : Math.round((passedCount / (totalCount || 1)) * 30);
+      document.getElementById('kpi-credits-val').textContent = `${creditsEarned} / 30`;
+    }
+
+    function populateSample() {
+      const semKey = currentSemester === 1 ? 's1' : 's2';
+      const ues = DATA_TRACKS[currentTrack][semKey] || [];
+      ues.forEach(ue => {
+        ue.modules.forEach(m => {
+          m.exam = +(12 + Math.random() * 4).toFixed(1);
+          m.td = +(13 + Math.random() * 4).toFixed(1);
+        });
+      });
+      renderTables();
+    }
+
+    function clearGrades() {
+      const semKey = currentSemester === 1 ? 's1' : 's2';
+      const ues = DATA_TRACKS[currentTrack][semKey] || [];
+      ues.forEach(ue => {
+        ue.modules.forEach(m => {
+          m.exam = 0;
+          m.td = 0;
+        });
+      });
+      renderTables();
+    }
+
+    // Initial render
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTables();
+    });
+  </script>
+
+
+</body></html>

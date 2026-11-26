@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" fill="none">
+  <!-- Stylized graduation cap & digital node icon -->
+  <rect x="2" y="4" width="32" height="32" rx="8" fill="#2563EB"/>
+  <path d="M18 10L9 15L18 20L27 15L18 10Z" fill="white"/>
+  <path d="M12 18V23C12 24.5 14.5 26 18 26C21.5 26 24 24.5 24 23V18" stroke="white" stroke-width="1.75" stroke-linecap="round"/>
+  <path d="M27 16.5V23.5" stroke="#93C5FD" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="27" cy="24" r="1.5" fill="#93C5FD"/>
+  <!-- Typography -->
+  <text x="42" y="22" font-family="Inter, system-ui, sans-serif" font-size="16" font-weight="800" fill="#0F172A" letter-spacing="-0.02em">ESTIN</text>
+  <text x="96" y="22" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="600" fill="#2563EB" letter-spacing="-0.01em">AVERAGE</text>
+  <text x="43" y="31" font-family="Inter, system-ui, sans-serif" font-size="7.5" font-weight="500" fill="#64748B" letter-spacing="0.04em">CALCULATEUR ACADÉMIQUE</text>
+</svg>
