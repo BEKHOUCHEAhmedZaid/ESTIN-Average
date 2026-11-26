@@ -10,7 +10,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ language, onToggleLanguage }) => {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      <div className="w-full max-w-full px-4 sm:px-6 md:px-8 h-14 flex items-center justify-between">
         {/* Logo & Clean Title */}
         <div className="flex items-center gap-2.5">
           <a href="#" className="flex items-center gap-2.5 group">
